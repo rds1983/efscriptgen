@@ -96,8 +96,7 @@ namespace EffectFarm
 					}
 
 					var outputFile = Path.GetFileNameWithoutExtension(fx) + postFix;
-					var outputExt = outputType != OutputType.FNA ? "mgfxo" : "fxo";
-					outputFile = Path.Combine(outputFolder, Path.ChangeExtension(outputFile, outputExt));
+					outputFile = Path.Combine(outputFolder, Path.ChangeExtension(outputFile, "efb"));
 
 					var commandLine = new StringBuilder();
 
