@@ -65,7 +65,7 @@ namespace EffectFarm
 					var variantsList = VariantsParser.FromXml(File.ReadAllText(xmlFile));
 					foreach (var v in variantsList)
 					{
-						var variant = string.Join(";", from d in v select $"{d.Key}={d.Value}");
+						var variant = string.Join(";", from d in v select d.Value == "1" ? d.Key : $"{d.Key}={d.Value}");
 						variants.Add(variant);
 					}
 				}
