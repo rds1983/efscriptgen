@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
+using efscriptgen;
 
 namespace EffectFarm
 {
@@ -61,16 +62,11 @@ namespace EffectFarm
 				var variants = new List<string>();
 				if (File.Exists(xmlFile))
 				{
-					var xDoc = XDocument.Load(xmlFile);
-					foreach (var defineTag in xDoc.Root.Elements())
+					var variantsList = VariantsParser.FromXml(File.ReadAllText(xmlFile));
+					foreach (var v in variantsList)
 					{
-						if (defineTag.Attribute("Value") != null)
-						{
-							var defineValue = defineTag.Attribute("Value").Value;
-							variants.Add(defineValue);
-						} else {
-							variants.Add(string.Empty);
-						}
+						var variant = string.Join(";", from d in v select $"{d.Key}={d.Value}");
+						variants.Add(variant);
 					}
 				}
 				else
@@ -104,7 +100,7 @@ namespace EffectFarm
 					{
 						commandLine.Append($"mgfxc \"{fx}\" \"{outputFile}\"");
 						commandLine.Append(" /Profile:");
-						commandLine.Append(outputType == OutputType.MGDX11?"DirectX_11": "OpenGL");
+						commandLine.Append(outputType == OutputType.MGDX11 ? "DirectX_11" : "OpenGL");
 
 						if (!string.IsNullOrEmpty(variant))
 						{
