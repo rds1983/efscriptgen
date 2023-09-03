@@ -47,7 +47,7 @@ namespace EffectFarm
 			return "FNA";
 		}
 
-		static string BuildScript(string inputFolder, List<string> fxFiles, OutputType outputType)
+		static Dictionary<string, string> BuildScript(string inputFolder, List<string> fxFiles, OutputType outputType)
 		{
 			var outputFolder = Path.Combine(inputFolder, OutputSubfolder(outputType));
 			if (!Directory.Exists(outputFolder))
@@ -55,7 +55,7 @@ namespace EffectFarm
 				Directory.CreateDirectory(outputFolder);
 			}
 
-			var sb = new StringBuilder();
+			var result = new Dictionary<string, string>();
 			foreach (var fx in fxFiles)
 			{
 				var xmlFile = Path.ChangeExtension(fx, "xml");
@@ -74,6 +74,7 @@ namespace EffectFarm
 					variants.Add(string.Empty);
 				}
 
+				var sb = new StringBuilder();
 				foreach (var variant in variants)
 				{
 					var postFix = string.Empty;
@@ -91,7 +92,8 @@ namespace EffectFarm
 						}
 					}
 
-					var outputFile = Path.GetFileNameWithoutExtension(fx) + postFix;
+					var name = Path.GetFileNameWithoutExtension(fx);
+					var outputFile = name + postFix;
 					outputFile = Path.Combine(outputFolder, Path.ChangeExtension(outputFile, "efb"));
 
 					var commandLine = new StringBuilder();
@@ -132,9 +134,22 @@ namespace EffectFarm
 
 					sb.AppendLine(commandLine.ToString());
 				}
+
+				result[Path.GetFileNameWithoutExtension(fx)] = sb.ToString();
 			}
 
-			return sb.ToString();
+			result["all"] = string.Join(Environment.NewLine, result.Values);
+
+			return result;
+		}
+
+		static void Write(string inputFolder, Dictionary<string, string> result, string postfix)
+		{
+			foreach (var pair in result)
+			{
+				var file = Path.Combine(inputFolder, $"compile_{pair.Key}_{postfix}.bat");
+				File.WriteAllText(file, pair.Value);
+			}
 		}
 
 		static void Process(string[] args)
@@ -162,11 +177,11 @@ namespace EffectFarm
 			}
 
 			var script = BuildScript(inputFolder, fxFiles, OutputType.MGDX11);
-			File.WriteAllText(Path.Combine(inputFolder, "compile_mgdx11.bat"), script);
+			Write(inputFolder, script, "mgdx11");
 			script = BuildScript(inputFolder, fxFiles, OutputType.MGOGL);
-			File.WriteAllText(Path.Combine(inputFolder, "compile_mgogl.bat"), script);
+			Write(inputFolder, script, "mgogl");
 			script = BuildScript(inputFolder, fxFiles, OutputType.FNA);
-			File.WriteAllText(Path.Combine(inputFolder, "compile_fna.bat"), script);
+			Write(inputFolder, script, "fna");
 
 			Log("The scripts generation was a success.");
 		}

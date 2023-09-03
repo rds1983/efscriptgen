@@ -9,7 +9,7 @@ namespace efscriptgen
 		private class DefinesBuilder
 		{
 			private List<KeyValuePair<string, string>> _currentDefine = new List<KeyValuePair<string, string>>();
-			private List<Dictionary<string, string>> _definesByLevel;
+			private List<List<KeyValuePair<string, string>>> _definesByLevel;
 			private int _level;
 			private List<Dictionary<string, string>> _result;
 
@@ -56,7 +56,7 @@ namespace efscriptgen
 				}
 			}
 
-			public List<Dictionary<string, string>> Build(List<Dictionary<string, string>> definesByLevel)
+			public List<Dictionary<string, string>> Build(List<List<KeyValuePair<string, string>>> definesByLevel)
 			{
 				_definesByLevel = definesByLevel ?? throw new ArgumentNullException(nameof(definesByLevel));
 				_result = new List<Dictionary<string, string>>();
@@ -71,7 +71,7 @@ namespace efscriptgen
 
 		public static List<Dictionary<string, string>> FromXml(string xml)
 		{
-			var definesByLevel = new List<Dictionary<string, string>>();
+			var definesByLevel = new List<List<KeyValuePair<string, string>>>();
 
 			// First run: parse data
 			var xDoc = XDocument.Parse(xml);
@@ -79,7 +79,7 @@ namespace efscriptgen
 			{
 				var parts = multiCompile.Value.Split(";");
 
-				var levelDefine = new Dictionary<string, string>();
+				var levelDefine = new List<KeyValuePair<string, string>>();
 				foreach (var part in parts)
 				{
 					var parts2 = part.Trim().Split("=");
@@ -91,7 +91,7 @@ namespace efscriptgen
 						value = parts2[1].Trim();
 					}
 
-					levelDefine[key] = value;
+					levelDefine.Add(new KeyValuePair<string, string>( key, value ));
 				}
 
 				definesByLevel.Add(levelDefine);

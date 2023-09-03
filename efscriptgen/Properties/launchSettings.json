@@ -2,7 +2,7 @@
   "profiles": {
     "efscriptgen": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\Projects\\Nursia\\src\\EffectsSource\""
+      "commandLineArgs": "\"D:\\Projects\\Nursia\\Nursia\\EffectsSource\""
     }
   }
 }
