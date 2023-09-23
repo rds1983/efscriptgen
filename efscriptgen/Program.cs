@@ -47,17 +47,33 @@ namespace EffectFarm
 			return "FNA";
 		}
 
-		static Dictionary<string, string> BuildScript(string inputFolder, List<string> fxFiles, OutputType outputType)
+		static void Process(string inputFolder, List<string> fxFiles, OutputType outputType)
 		{
-			var outputFolder = Path.Combine(inputFolder, OutputSubfolder(outputType));
-			if (!Directory.Exists(outputFolder))
-			{
-				Directory.CreateDirectory(outputFolder);
-			}
-
 			var result = new Dictionary<string, string>();
 			foreach (var fx in fxFiles)
 			{
+				// Build the output folder
+				var outputFolder = inputFolder;
+				outputFolder = Path.Combine(outputFolder, OutputSubfolder(outputType));
+				outputFolder = Path.Combine(outputFolder, "bin");
+
+				var subFolder = Path.GetDirectoryName(fx).Substring(inputFolder.Length);
+				if (subFolder.StartsWith(Path.DirectorySeparatorChar))
+				{
+					subFolder = subFolder.Substring(1);
+				}
+
+				if (!string.IsNullOrEmpty(subFolder))
+				{
+					outputFolder = Path.Combine(outputFolder, subFolder);
+				}
+
+				if (!Directory.Exists(outputFolder))
+				{
+					Directory.CreateDirectory(outputFolder);
+				}
+
+				// Build variants list
 				var xmlFile = Path.ChangeExtension(fx, "xml");
 				var variants = new List<string>();
 				if (File.Exists(xmlFile))
@@ -135,26 +151,26 @@ namespace EffectFarm
 					sb.AppendLine(commandLine.ToString());
 				}
 
-				result[Path.GetFileNameWithoutExtension(fx)] = sb.ToString();
+				var id = Path.Combine(subFolder, Path.GetFileNameWithoutExtension(fx));
+				id = id.Replace('\\', '_');
+				id = id.Replace('/', '_');
+				result[id] = sb.ToString();
 			}
 
 			result["all"] = string.Join(Environment.NewLine, result.Values);
 
-			return result;
-		}
+			inputFolder = Path.Combine(inputFolder, OutputSubfolder(outputType));
 
-		static void Write(string inputFolder, Dictionary<string, string> result, string postfix)
-		{
 			foreach (var pair in result)
 			{
-				var file = Path.Combine(inputFolder, $"compile_{pair.Key}_{postfix}.bat");
+				var file = Path.Combine(inputFolder, $"compile_{pair.Key}.bat");
 				File.WriteAllText(file, pair.Value);
 			}
 		}
 
 		static void Process(string[] args)
 		{
-			Log($"EffectFarm script generator {Version}.");
+			Log($"Effect compilation script generator {Version}.");
 
 			if (args.Length < 1)
 			{
@@ -169,19 +185,17 @@ namespace EffectFarm
 				return;
 			}
 
-			var fxFiles = Directory.EnumerateFiles(inputFolder, "*.fx").ToList();
+			var fxFiles = Directory.EnumerateFiles(inputFolder, "*.fx",
+				new EnumerationOptions { RecurseSubdirectories = true }).ToList();
 			if (fxFiles.Count == 0)
 			{
 				Log($"No '.fx' found at folder '{inputFolder}'.");
 				return;
 			}
 
-			var script = BuildScript(inputFolder, fxFiles, OutputType.MGDX11);
-			Write(inputFolder, script, "mgdx11");
-			script = BuildScript(inputFolder, fxFiles, OutputType.MGOGL);
-			Write(inputFolder, script, "mgogl");
-			script = BuildScript(inputFolder, fxFiles, OutputType.FNA);
-			Write(inputFolder, script, "fna");
+			Process(inputFolder, fxFiles, OutputType.MGDX11);
+			Process(inputFolder, fxFiles, OutputType.MGOGL);
+			Process(inputFolder, fxFiles, OutputType.FNA);
 
 			Log("The scripts generation was a success.");
 		}

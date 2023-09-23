@@ -2,7 +2,7 @@
   "profiles": {
     "efscriptgen": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\Projects\\Nursia\\Nursia\\EffectsSource\""
+      "commandLineArgs": "\"D:\\Projects\\DigitalRune\\Source\\DigitalRune.Graphics\\EffectsSource\""
     }
   }
 }
