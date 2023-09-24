@@ -53,7 +53,7 @@ namespace EffectFarm
 			foreach (var fx in fxFiles)
 			{
 				// Build the output folder
-				var outputFolder = inputFolder;
+				var outputFolder = Path.GetFullPath(inputFolder);
 				outputFolder = Path.Combine(outputFolder, OutputSubfolder(outputType));
 				outputFolder = Path.Combine(outputFolder, "bin");
 
