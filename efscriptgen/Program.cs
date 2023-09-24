@@ -114,9 +114,10 @@ namespace EffectFarm
 
 					var commandLine = new StringBuilder();
 
+					var fxFullPath = Path.GetFullPath(fx);
 					if (outputType != OutputType.FNA)
 					{
-						commandLine.Append($"mgfxc \"{fx}\" \"{outputFile}\"");
+						commandLine.Append($"mgfxc \"{fxFullPath}\" \"{outputFile}\"");
 						commandLine.Append(" /Profile:");
 						commandLine.Append(outputType == OutputType.MGDX11 ? "DirectX_11" : "OpenGL");
 
@@ -127,7 +128,7 @@ namespace EffectFarm
 					}
 					else
 					{
-						commandLine.Append($"fxc \"{fx}\" /Fo \"{outputFile}\"");
+						commandLine.Append($"fxc \"{fxFullPath}\" /Fo \"{outputFile}\"");
 						commandLine.Append(" /T:fx_2_0");
 
 						if (!string.IsNullOrEmpty(variant))
