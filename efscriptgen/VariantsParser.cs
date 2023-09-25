@@ -8,22 +8,25 @@ namespace efscriptgen
 	{
 		private class DefinesBuilder
 		{
-			private List<KeyValuePair<string, string>> _currentDefine = new List<KeyValuePair<string, string>>();
-			private List<List<KeyValuePair<string, string>>> _definesByLevel;
+			private List<Dictionary<string, string>> _currentDefine = new List<Dictionary<string, string>>();
+			private List<List<Dictionary<string, string>>> _definesByLevel;
 			private int _level;
 			private List<Dictionary<string, string>> _result;
-
-			private void AddDefine(string name, string value)
-			{
-				_currentDefine.Add(new KeyValuePair<string, string>(name, value));
-			}
 
 			private void StoreResult()
 			{
 				var dict = new Dictionary<string, string>();
-				foreach(var pair in _currentDefine)
+				foreach (var defines in _currentDefine)
 				{
-					dict[pair.Key] = pair.Value;
+					foreach (var pair in defines)
+					{
+						if (pair.Key == "_")
+						{
+							continue;
+						}
+
+						dict[pair.Key] = pair.Value;
+					}
 				}
 
 				_result.Add(dict);
@@ -31,12 +34,9 @@ namespace efscriptgen
 
 			private void BuildInternal()
 			{
-				foreach (var pair in _definesByLevel[_level])
+				foreach (var defines in _definesByLevel[_level])
 				{
-					if (pair.Key != "_")
-					{
-						AddDefine(pair.Key, pair.Value);
-					}
+					_currentDefine.Add(defines);
 
 					if (_level < _definesByLevel.Count - 1)
 					{
@@ -48,15 +48,13 @@ namespace efscriptgen
 					{
 						// Store result at leafs
 						StoreResult();
-						if (_currentDefine.Count > 0)
-						{
-							_currentDefine.RemoveAt(_currentDefine.Count - 1);
-						}
 					}
+
+					_currentDefine.RemoveAt(_currentDefine.Count - 1);
 				}
 			}
 
-			public List<Dictionary<string, string>> Build(List<List<KeyValuePair<string, string>>> definesByLevel)
+			public List<Dictionary<string, string>> Build(List<List<Dictionary<string, string>>> definesByLevel)
 			{
 				_definesByLevel = definesByLevel ?? throw new ArgumentNullException(nameof(definesByLevel));
 				_result = new List<Dictionary<string, string>>();
@@ -71,7 +69,7 @@ namespace efscriptgen
 
 		public static List<Dictionary<string, string>> FromXml(string xml)
 		{
-			var definesByLevel = new List<List<KeyValuePair<string, string>>>();
+			var definesByLevel = new List<List<Dictionary<string, string>>>();
 
 			// First run: parse data
 			var xDoc = XDocument.Parse(xml);
@@ -79,19 +77,58 @@ namespace efscriptgen
 			{
 				var parts = multiCompile.Value.Split(";");
 
-				var levelDefine = new List<KeyValuePair<string, string>>();
+				var levelDefine = new List<Dictionary<string, string>>();
 				foreach (var part in parts)
 				{
-					var parts2 = part.Trim().Split("=");
-					var key = parts2[0].Trim();
-
-					string value = "1";
-					if (parts2.Length > 1)
+					var partTrimmed = part.Trim();
+					if (string.IsNullOrEmpty(partTrimmed))
 					{
-						value = parts2[1].Trim();
+						continue;
 					}
 
-					levelDefine.Add(new KeyValuePair<string, string>( key, value ));
+					if (!partTrimmed.StartsWith("["))
+					{
+						// Single value
+						var parts2 = partTrimmed.Split("=");
+						var key = parts2[0].Trim();
+
+						var value = "1";
+						if (parts2.Length > 1)
+						{
+							value = parts2[1].Trim();
+						}
+
+						levelDefine.Add(new Dictionary<string, string>() { [key] = value });
+					}
+					else
+					{
+						if (!partTrimmed.EndsWith("]"))
+						{
+							throw new Exception($"Multi-value '{partTrimmed}' doesnt end with ']'");
+						}
+
+						var values = new Dictionary<string, string>();
+						partTrimmed = partTrimmed.Substring(1, partTrimmed.Length - 2).Trim();
+						var parts2 = partTrimmed.Split(',');
+						foreach (var part2 in parts2)
+						{
+							var partTrimmed2 = part2.Trim();
+
+							var parts3 = partTrimmed2.Split("=");
+							var key = parts3[0].Trim();
+
+							var value = "1";
+							if (parts3.Length > 1)
+							{
+								value = parts3[1].Trim();
+							}
+
+							values[key] = value;
+						}
+
+						levelDefine.Add(values);
+					}
+
 				}
 
 				definesByLevel.Add(levelDefine);
