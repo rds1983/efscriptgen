@@ -150,6 +150,7 @@ namespace EffectFarm
 					}
 
 					sb.AppendLine(commandLine.ToString());
+					sb.AppendLine(@"@if %errorlevel% neq 0 exit /b %errorlevel%");
 				}
 
 				var id = Path.Combine(subFolder, Path.GetFileNameWithoutExtension(fx));

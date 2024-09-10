@@ -5,7 +5,7 @@
     <PackAsTool>true</PackAsTool>
     <PackageId>efscriptgen</PackageId>
     <ToolCommandName>efscriptgen</ToolCommandName>
-    <Version>0.7.4</Version>
+    <Version>0.7.5</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/rds1983/efscriptgen</PackageProjectUrl>
   </PropertyGroup>
