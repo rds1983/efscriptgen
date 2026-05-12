@@ -150,37 +150,39 @@ For more complex configurations, variants can include preprocessor macros with s
 
 ```xml
 <Root>
-	<MultiCompile>QUALITY=LOW;QUALITY=MEDIUM;QUALITY=HIGH</MultiCompile>
+	<MultiCompile>QUALITY=0;QUALITY=1;QUALITY=2</MultiCompile>
 	<MultiCompile>TEXTURE;_</MultiCompile>
 </Root>
 ```
 
 **Explanation:**
-- `QUALITY=LOW` - Defines `QUALITY` macro with value `LOW`
+- `QUALITY=0` - Defines `QUALITY` macro with numeric value `0` (Low quality)
+- `QUALITY=1` - Defines `QUALITY` macro with numeric value `1` (Medium quality)
+- `QUALITY=2` - Defines `QUALITY` macro with numeric value `2` (High quality)
 - Multiple key-value pairs separated by semicolons create alternatives
 - The second `<MultiCompile>` still uses Boolean variants
 
 **Generated Variants (6 total):**
-1. `QUALITY=LOW`
-2. `QUALITY=LOW; TEXTURE=1`
-3. `QUALITY=MEDIUM`
-4. `QUALITY=MEDIUM; TEXTURE=1`
-5. `QUALITY=HIGH`
-6. `QUALITY=HIGH; TEXTURE=1`
+1. `QUALITY=0`
+2. `QUALITY=0; TEXTURE=1`
+3. `QUALITY=1`
+4. `QUALITY=1; TEXTURE=1`
+5. `QUALITY=2`
+6. `QUALITY=2; TEXTURE=1`
 
 **Output Files:**
-- `Shader_QUALITY_LOW.efb`
-- `Shader_QUALITY_LOW_TEXTURE.efb`
-- `Shader_QUALITY_MEDIUM.efb`
-- `Shader_QUALITY_MEDIUM_TEXTURE.efb`
-- `Shader_QUALITY_HIGH.efb`
-- `Shader_QUALITY_HIGH_TEXTURE.efb`
+- `Shader_QUALITY_0.efb`
+- `Shader_QUALITY_0_TEXTURE.efb`
+- `Shader_QUALITY_1.efb`
+- `Shader_QUALITY_1_TEXTURE.efb`
+- `Shader_QUALITY_2.efb`
+- `Shader_QUALITY_2_TEXTURE.efb`
 
 **Use Cases:**
-- Quality levels: LOW, MEDIUM, HIGH, ULTRA
-- Shadow techniques: NOSHADOW, SIMPLESHADOW, PCFSHADOW
-- Anti-aliasing modes: FXAA_OFF, FXAA_LOW, FXAA_HIGH
-- Resolution-dependent optimizations
+- Quality levels: 0=Low, 1=Medium, 2=High, 3=Ultra
+- Shadow techniques: 0=None, 1=Simple, 2=PCF
+- Anti-aliasing modes: 0=Off, 1=FXAA, 2=SMAA
+- Resolution-dependent optimizations: 0=Mobile, 1=Medium, 2=High-end
 
 ## Grouped Values - Example
 
@@ -248,56 +250,3 @@ So the first MultiCompile generates 3 variants (one per group), and combined wit
 ```
 
 This creates 3 × 2 × 3 = 18 variants combining platform profiles, normal mapping support, and AA techniques.
-
-## References
-
-This project works with effect files and compilation tools from several game development frameworks:
-
-### Frameworks Supported
-
-- **MonoGame** - Cross-platform game framework supporting DirectX 11 and OpenGL
-  - Uses `mgfxc` compiler for effect files
-  - Profiles: `DirectX_11`, `OpenGL`
-  
-- **FNA** - XNA Framework re-implementation
-  - Uses `fxc` (DirectX FX Compiler)
-  - Fixed profile: `fx_2_0`
-
-### Compiler Tools
-
-- **mgfxc** - MonoGame Effect Compiler
-  - Compiles `.fx` files to `.efb` (Effect Binary Format)
-  - Supports multiple target profiles
-  - Integrated with MonoGame content pipeline
-  - [MonoGame Documentation](https://docs.monogame.net/)
-
-- **fxc** - Microsoft DirectX Effect Compiler
-  - Legacy but still used by FNA
-  - Compiles shader effects for Direct3D
-  - Part of Windows SDK / DirectX SDK
-  - Produces binary effect files
-
-### Effect File Format
-
-- **.fx files** - HLSL effect source files
-  - Contains shader code (vertex, pixel, geometry shaders)
-  - Defines techniques and passes
-  - Supports preprocessor directives (`#define`, `#if`, etc.)
-
-### XML Variant Definition
-
-- **.xml files** - Variant configuration files (created by user)
-  - Defines `<MultiCompile>` elements
-  - Controls which shader permutations to generate
-  - Enables data-driven shader variant management
-
-### Related Tools & Projects
-
-- **Content Pipeline** - MonoGame's asset compilation system
-  - efscriptgen output integrates with custom content processor
-  - Effect files are typically compiled during game build
-  
-- **Shader Compilation** - General references
-  - [HLSL Preprocessor Directives](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/preprocessor-directives--directx-hlsl-)
-  - [Effect Framework (DirectX)](https://docs.microsoft.com/en-us/windows/win32/direct3d11/effects-11)
-

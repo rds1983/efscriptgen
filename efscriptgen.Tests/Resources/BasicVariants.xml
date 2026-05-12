@@ -1,0 +1,4 @@
+<Root>
+	<MultiCompile>TEXTURE;_</MultiCompile>
+	<MultiCompile>LIGHTNING;_</MultiCompile>
+</Root>

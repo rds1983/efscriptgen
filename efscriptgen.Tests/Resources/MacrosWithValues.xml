@@ -1,0 +1,4 @@
+<Root>
+	<MultiCompile>QUALITY=0;QUALITY=1;QUALITY=2</MultiCompile>
+	<MultiCompile>TEXTURE;_</MultiCompile>
+</Root>

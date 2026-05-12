@@ -1,0 +1,5 @@
+<Root>
+	<MultiCompile>MOBILE;PC_LOW;[PC_HIGH,ADVANCED_EFFECTS]</MultiCompile>
+	<MultiCompile>USE_NORMAL_MAP;_</MultiCompile>
+	<MultiCompile>ANTIALIASING=FXAA;ANTIALIASING=SMAA;_</MultiCompile>
+</Root>

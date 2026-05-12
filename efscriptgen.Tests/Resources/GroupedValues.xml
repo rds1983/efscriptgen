@@ -1,0 +1,4 @@
+<Root>
+	<MultiCompile>[LOW,LIGHTNING];[MEDIUM,LIGHTNING,SIMPLESHADOW];[HIGH,LIGHTNING,PCFSHADOW]</MultiCompile>
+	<MultiCompile>TEXTURE;_</MultiCompile>
+</Root>
