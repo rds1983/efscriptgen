@@ -1,4 +1,4 @@
 <Root>
-	<MultiCompile>QUALITY=0;QUALITY=1;QUALITY=2</MultiCompile>
+	<MultiCompile>LIGHTS=4;LIGHTS=8;LIGHTS=16</MultiCompile>
 	<MultiCompile>TEXTURE;_</MultiCompile>
 </Root>

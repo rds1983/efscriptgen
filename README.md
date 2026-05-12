@@ -150,33 +150,33 @@ For more complex configurations, variants can include preprocessor macros with s
 
 ```xml
 <Root>
-	<MultiCompile>QUALITY=0;QUALITY=1;QUALITY=2</MultiCompile>
+	<MultiCompile>LIGHTS=4;LIGHTS=8;LIGHTS=16</MultiCompile>
 	<MultiCompile>TEXTURE;_</MultiCompile>
 </Root>
 ```
 
 **Explanation:**
-- `QUALITY=0` - Defines `QUALITY` macro with numeric value `0` (Low quality)
-- `QUALITY=1` - Defines `QUALITY` macro with numeric value `1` (Medium quality)
-- `QUALITY=2` - Defines `QUALITY` macro with numeric value `2` (High quality)
+- `LIGHTS=4` - Defines `LIGHTS` macro with numeric value `4`
+- `LIGHTS=8` - Defines `LIGHTS` macro with numeric value `8`
+- `LIGHTS=16` - Defines `LIGHTS` macro with numeric value `16`
 - Multiple key-value pairs separated by semicolons create alternatives
 - The second `<MultiCompile>` still uses Boolean variants
 
 **Generated Variants (6 total):**
-1. `QUALITY=0`
-2. `QUALITY=0; TEXTURE=1`
-3. `QUALITY=1`
-4. `QUALITY=1; TEXTURE=1`
-5. `QUALITY=2`
-6. `QUALITY=2; TEXTURE=1`
+1. `LIGHTS=4`
+2. `LIGHTS=4; TEXTURE=1`
+3. `LIGHTS=8`
+4. `LIGHTS=8; TEXTURE=1`
+5. `LIGHTS=16`
+6. `LIGHTS=16; TEXTURE=1`
 
 **Output Files:**
-- `Shader_QUALITY_0.efb`
-- `Shader_QUALITY_0_TEXTURE.efb`
-- `Shader_QUALITY_1.efb`
-- `Shader_QUALITY_1_TEXTURE.efb`
-- `Shader_QUALITY_2.efb`
-- `Shader_QUALITY_2_TEXTURE.efb`
+- `Shader_LIGHTS_4.efb`
+- `Shader_LIGHTS_4_TEXTURE.efb`
+- `Shader_LIGHTS_8.efb`
+- `Shader_LIGHTS_8_TEXTURE.efb`
+- `Shader_LIGHTS_16.efb`
+- `Shader_LIGHTS_16_TEXTURE.efb`
 
 ## Grouped Values - Example
 

@@ -49,30 +49,30 @@ namespace efscriptgen.Tests
 		Assert.NotNull(variants);
 		Assert.Equal(6, variants.Count);
 
-		// QUALITY=0 without TEXTURE
-		var vq0 = variants.FirstOrDefault(v => v.ContainsKey("QUALITY") && v["QUALITY"] == "0" && v.Count == 1);
-		Assert.NotNull(vq0);
+		// LIGHTS=4 without TEXTURE
+		var vl4 = variants.FirstOrDefault(v => v.ContainsKey("LIGHTS") && v["LIGHTS"] == "4" && v.Count == 1);
+		Assert.NotNull(vl4);
 
-		// QUALITY=0 with TEXTURE
-		var vq0t = variants.FirstOrDefault(v => v.ContainsKey("QUALITY") && v["QUALITY"] == "0" && v.ContainsKey("TEXTURE") && v.Count == 2);
-		Assert.NotNull(vq0t);
-		Assert.Equal("1", vq0t["TEXTURE"]);
+		// LIGHTS=4 with TEXTURE
+		var vl4t = variants.FirstOrDefault(v => v.ContainsKey("LIGHTS") && v["LIGHTS"] == "4" && v.ContainsKey("TEXTURE") && v.Count == 2);
+		Assert.NotNull(vl4t);
+		Assert.Equal("1", vl4t["TEXTURE"]);
 
-		// QUALITY=1 without TEXTURE
-		var vq1 = variants.FirstOrDefault(v => v.ContainsKey("QUALITY") && v["QUALITY"] == "1" && v.Count == 1);
-		Assert.NotNull(vq1);
+		// LIGHTS=8 without TEXTURE
+		var vl8 = variants.FirstOrDefault(v => v.ContainsKey("LIGHTS") && v["LIGHTS"] == "8" && v.Count == 1);
+		Assert.NotNull(vl8);
 
-		// QUALITY=1 with TEXTURE
-		var vq1t = variants.FirstOrDefault(v => v.ContainsKey("QUALITY") && v["QUALITY"] == "1" && v.ContainsKey("TEXTURE") && v.Count == 2);
-		Assert.NotNull(vq1t);
+		// LIGHTS=8 with TEXTURE
+		var vl8t = variants.FirstOrDefault(v => v.ContainsKey("LIGHTS") && v["LIGHTS"] == "8" && v.ContainsKey("TEXTURE") && v.Count == 2);
+		Assert.NotNull(vl8t);
 
-		// QUALITY=2 without TEXTURE
-		var vq2 = variants.FirstOrDefault(v => v.ContainsKey("QUALITY") && v["QUALITY"] == "2" && v.Count == 1);
-		Assert.NotNull(vq2);
+		// LIGHTS=16 without TEXTURE
+		var vl16 = variants.FirstOrDefault(v => v.ContainsKey("LIGHTS") && v["LIGHTS"] == "16" && v.Count == 1);
+		Assert.NotNull(vl16);
 
-		// QUALITY=2 with TEXTURE
-		var vq2t = variants.FirstOrDefault(v => v.ContainsKey("QUALITY") && v["QUALITY"] == "2" && v.ContainsKey("TEXTURE") && v.Count == 2);
-		Assert.NotNull(vq2t);
+		// LIGHTS=16 with TEXTURE
+		var vl16t = variants.FirstOrDefault(v => v.ContainsKey("LIGHTS") && v["LIGHTS"] == "16" && v.ContainsKey("TEXTURE") && v.Count == 2);
+		Assert.NotNull(vl16t);
 	}
 
 	[Fact]
