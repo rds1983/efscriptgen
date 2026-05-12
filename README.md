@@ -178,12 +178,6 @@ For more complex configurations, variants can include preprocessor macros with s
 - `Shader_QUALITY_2.efb`
 - `Shader_QUALITY_2_TEXTURE.efb`
 
-**Use Cases:**
-- Quality levels: 0=Low, 1=Medium, 2=High, 3=Ultra
-- Shadow techniques: 0=None, 1=Simple, 2=PCF
-- Anti-aliasing modes: 0=Off, 1=FXAA, 2=SMAA
-- Resolution-dependent optimizations: 0=Mobile, 1=Medium, 2=High-end
-
 ## Grouped Values - Example
 
 For complex shader feature combinations where certain defines must appear together, use grouped syntax:
@@ -234,19 +228,3 @@ So the first MultiCompile generates 3 variants (one per group), and combined wit
 - `Shader_LIGHTNING_MEDIUM_PCFSHADOW.efb`
 - `Shader_LIGHTNING_MEDIUM_PCFSHADOW_TEXTURE.efb`
 
-**Use Cases:**
-- Quality tiers with required features: "Low quality skips shadows, Medium adds simple shadows, High uses PCF shadows"
-- Platform-specific combinations: "Mobile = no lighting + optimizations, Desktop = full lighting + effects"
-- Feature bundles: "Certain post-process effects require specific lighting setups"
-
-**Advanced Example with Mixed Types:**
-
-```xml
-<Root>
-	<MultiCompile>MOBILE;PC_LOW;[PC_HIGH,ADVANCED_EFFECTS]</MultiCompile>
-	<MultiCompile>USE_NORMAL_MAP;_</MultiCompile>
-	<MultiCompile>ANTIALIASING=FXAA;ANTIALIASING=SMAA;_</MultiCompile>
-</Root>
-```
-
-This creates 3 × 2 × 3 = 18 variants combining platform profiles, normal mapping support, and AA techniques.
