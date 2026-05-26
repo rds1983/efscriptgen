@@ -228,3 +228,13 @@ So the first MultiCompile generates 3 variants (one per group), and combined wit
 - `Shader_LIGHTNING_MEDIUM_PCFSHADOW.efb`
 - `Shader_LIGHTNING_MEDIUM_PCFSHADOW_TEXTURE.efb`
 
+## Sponsor
+If this project is useful for you, you can support development:
+- Boosty: https://boosty.to/rds1983
+- Telegram Wallet: https://t.me/rds1983
+
+### Crypto
+
+USDT (TON): `UQCQy6tFInPvqinE44zHY4R0rYS3niaBikkqiSyGmyoAMwyO`
+
+TON: `UQCQy6tFInPvqinE44zHY4R0rYS3niaBikkqiSyGmyoAMwyO`
